@@ -18,23 +18,18 @@ export class FormPage implements OnInit {
 
   constructor(private productService:ProductoService,
     private router:Router) {
-    this.products = this.productService.getProducts();
    }
 
   ngOnInit() {
   }
 
   public addProduct(){
-    this.prods = this.productService.getProducts();
-    let id = this.prods.length
     this.product={
-      id:id,
       photo:this.photo,
       name:this.name,
       price:this.price
     }
     this.productService.addProduct(this.product);
-    this.products = this.productService.getProducts();
     this.router.navigateByUrl('/home',{replaceUrl:true});
   }
 

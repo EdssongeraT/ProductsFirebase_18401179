@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CarritoService } from '../carrito.service';
-import { Carrito } from '../model/carrito';
 import { AlertController } from "@ionic/angular";
+import { CarritoService } from '../services/carrito.service';
+import { Producto } from '../model/producto';
 
 @Component({
   selector: 'app-carrito',
@@ -9,39 +9,25 @@ import { AlertController } from "@ionic/angular";
   styleUrls: ['./carrito.page.scss'],
 })
 export class CarritoPage implements OnInit {
-  private carrito:Carrito[]
+  private carrito:Producto[]
+  public total:number;
   constructor(
-    private carritoServ:CarritoService,
-    private alertController: AlertController
+    private carritoServ:CarritoService
     ) {
-    this.carrito = this.carritoServ.getCarrito();
-   }
-
-   public async removeProduct(pos: number) {
-    const alert = await this.alertController.create({
-      header: 'Confirmación',
-      subHeader: '¿Estás seguro que deseas eliminar del carrito?',
-      message: 'Esto es una confirmación',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: () => {
-
-          }
-        },
-        {
-          text: 'Aceptar',
-          role: 'confirm',
-          handler: () => {
-            this.carrito = this.carritoServ.removeProduct(pos);
+      this.total=0
+      this.carritoServ.getCarrito().subscribe(resp=>{
+        this.carrito = resp
+        if(this.carrito){
+          for(let i=0;i<this.carrito.length;i++){
+            this.total+=this.carrito[i].price
           }
         }
-      ]
-    });
+      });
+   }
 
-    await alert.present();
-
+   public async removeProduct(id: string) {
+      this.carritoServ.removeProduct(id);
+      this.total=0
   }
 
   ngOnInit() {

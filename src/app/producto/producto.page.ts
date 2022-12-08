@@ -16,12 +16,21 @@ export class ProductoPage implements OnInit {
   constructor(
     private productService:ProductoService,
     private aroute: ActivatedRoute
-    ) { }
+    ) { 
+
+      this.product = {
+        name: "",
+        price: 0,
+        photo: "" 
+      }
+    }
 
   ngOnInit() {
     this.aroute.queryParams.subscribe((params)=>{
-      this.product = this.productService.getProductById(params.id);
-      });
+      this.productService.getProductById(params.id).subscribe(item=>{
+        this.product = item as Producto
+      })
+    });
   }
 
 }

@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Producto } from '../model/producto';
 import { ProductoService } from '../services/producto.service';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { CarritoService } from '../carrito.service';
 import { Carrito } from '../model/carrito';
+import { CarritoService } from '../services/carrito.service';
 
 @Component({
   selector: 'app-home',
@@ -14,15 +13,17 @@ import { Carrito } from '../model/carrito';
 export class HomePage {
   public products : Producto[]
   public carrito : Carrito[]
+  public product:Producto;
 
 
   constructor(
-    private alertcntroller: AlertController,
     private productService:ProductoService,
     private router:Router,
     private carritoService:CarritoService
     ) {
-      this.products = this.productService.getProducts();
+      this.productService.getProducts().subscribe(resp=>{
+        this.products = resp
+      });
     }
 
     public getProductById(id:string):void{
@@ -30,13 +31,15 @@ export class HomePage {
         queryParams:{id:id}
       });
     }
-
+ 
     
   public addCarrito(prod:Producto){
-    let c = {
-      producto:prod
+    this.product={
+      name:prod.name,
+      photo:prod.photo,
+      price:prod.price
     }
-    this.carritoService.addCarrito(c);
+    this.carritoService.addCarrito(this.product);
   }
 
 }
