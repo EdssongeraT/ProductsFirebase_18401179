@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Producto } from '../model/producto';
 import { ProductoService } from '../services/producto.service';
 import { Router } from '@angular/router';
-import { Carrito } from '../model/carrito';
 import { CarritoService } from '../services/carrito.service';
 
 @Component({
@@ -12,7 +11,6 @@ import { CarritoService } from '../services/carrito.service';
 })
 export class HomePage {
   public products : Producto[]
-  public carrito : Carrito[]
   public product:Producto;
 
 
